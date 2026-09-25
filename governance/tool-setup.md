@@ -19,27 +19,28 @@
 | 注入项 | 由谁写入 | 写在哪 | 注入了什么 | 谁来拆 |
 |---|---|---|---|---|
 | codegraph MCP server | `codegraph install` | `~/.claude.json`；项目 `.mcp.json` | MCP 工具 + 初始化时下发的使用说明，要求会话优先用它查代码 | `codegraph uninstall` |
-| codegraph 提示词 hook | `codegraph install` | `settings.json` 的 UserPromptSubmit | 每轮对话往上下文里塞 codegraph 数据 | `codegraph uninstall` |
+| codegraph 提示词 hook | `codegraph install` | `settings.json` 的 UserPromptSubmit | 用户问结构、流程、影响面类问题时，自动跑 `codegraph explore` 把结果塞进上下文 | `codegraph uninstall` |
 | codegraph 权限 | `codegraph install` | `settings.json` | 自动放行 `mcp__codegraph__*` | `codegraph uninstall` |
 | codegraph 说明段 | `codegraph install` | `~/.claude/CLAUDE.md`；项目 `.claude/CLAUDE.md` | 带 `CODEGRAPH_START` 标记的一段，要求先用 codegraph 再 grep | `codegraph uninstall` |
-| graphify skill | `graphify install` | `~/.claude/skills/graphify/` | skill 本体 | `graphify uninstall` |
-| graphify skill 登记段 | `graphify install` | `~/.claude/CLAUDE.md` | `# graphify` 三行登记 | **手动删**（`graphify uninstall` 不删，0.9.37 实测） |
-| graphify 读前 hook | `graphify claude install` | 项目 `.claude/settings.json` 的 PreToolUse | 目录里有 `graphify-out/graph.json` 时，每次 Grep/Read/Glob 前都强制要求先跑 `graphify query` | `graphify uninstall` |
-| graphify 说明段 | `graphify claude install` | 项目 `CLAUDE.md` | 一段 graphify 说明 | `graphify uninstall` |
+| graphify skill | `graphify install` | `~/.claude/skills/graphify/` | skill 本体 | `graphify claude uninstall` |
+| graphify skill 登记段 | `graphify install` | `~/.claude/CLAUDE.md` | `# graphify` 三行登记 | **手动删**（uninstall 类命令都不删，0.9.37 实测） |
+| graphify 项目范围 skill | `graphify install --project` | 项目 `.claude/skills/graphify/`、项目 `.claude/CLAUDE.md` 登记段 | 同上，只作用于这个项目 | `graphify claude uninstall --project` |
+| graphify 读前 hook | `graphify claude install` | 项目 `.claude/settings.json` 的 PreToolUse | 目录里有 `graphify-out/graph.json` 时，每次 Grep/Read/Glob 前提醒先跑 `graphify query`（`--strict` 装法会直接拦截） | `graphify claude uninstall` |
+| graphify 说明段 | `graphify claude install` | 项目 `CLAUDE.md` | 一段 graphify 说明 | `graphify claude uninstall` |
 | graphify 旧配置备份 | `graphify claude install` | 项目 `.claude/settings.json.graphify-bak` | 写 hook 前的 settings 副本，可能带着 codegraph 的 hook 和权限 | **手动删** |
-| 提交后刷新索引 | `graphify hook install`、旧版 `codegraph init` | `.git/hooks/`、`.gitattributes` | 只跑 `codegraph sync`、`graphify update`，不进 AI 上下文 | 保留（可选，见第 3 节）；`graphify uninstall` 会顺带删掉，要的话拆完重装 |
+| 提交后刷新索引 | `graphify hook install`；`codegraph init`（文件监听不可用时提议，默认装） | `.git/hooks/`；graphify 另写 `.gitattributes` 和 `.git/config` 里的合并规则 | 只跑 `codegraph sync`、`graphify update`，不进 AI 上下文 | 保留（可选，见第 3 节） |
 
-以前接入过要清理的，按 `GOVERNANCE_PREPARE`「附：以前接入过助手，或扫描有输出」。
+以前接入过要清理的，按 `GOVERNANCE_PREPARE`「附：扫描有输出怎么清」。
 
-升级：`codegraph upgrade` 会自动跑 `codegraph install --refresh`，官方说明是「Rewrite what previous installs configured, for already-configured agents only (never adds new ones)」——只装命令行时没有已接入的助手，不会写。升级后跑一次 `GOVERNANCE_TOOL_SCAN` 确认即可。graphify 升级后要重跑 `graphify hook install`（官方：hook 脚本里写死了解释器路径）。
+升级：`codegraph upgrade` 会自动跑 `codegraph install --refresh`，官方说明是「Rewrite what previous installs configured, for already-configured agents only (never adds new ones)」——只装命令行时没有已接入的助手，不会写。升级后跑一次 `GOVERNANCE_TOOL_SCAN` 确认即可。
 
 ## 3. 查询前先刷新
 
 codegraph 的自动同步是 MCP 服务在监听文件（官方 README「How It Works」第 4 条），只用命令行时没有监听，改了代码索引不会跟着变；官方也写明在助手会话之外用索引时要先手动 sync。实测：新加的函数不 sync 就查不到，`codegraph status .` 会列出 `Pending Changes`。
 
 ```bash
-codegraph sync .
-graphify update .
+codegraph sync <代码根>
+graphify update <代码根>
 ```
 
 想让提交后自动刷新，可以把下面这段加进项目的 `.git/hooks/post-commit`、`post-checkout`、`post-merge`（文件要有执行权限）。它只刷新本地索引，不碰助手配置：
@@ -51,7 +52,7 @@ if command -v codegraph >/dev/null 2>&1; then
 fi
 ```
 
-graphify 对应的是 `graphify hook install`，也只装 git hooks。
+graphify 对应的是 `graphify hook install`：装 git hooks，另写 `.gitattributes` 和 `.git/config` 里的 graph.json 合并规则，都不碰助手配置。graphify 升级后要重跑它（官方：hook 脚本里写死了解释器路径）。
 
 ## 4. 可选：源码调查子代理 code-scout
 
@@ -61,10 +62,10 @@ graphify 对应的是 `graphify hook install`，也只装 git hooks。
 
 ## 5. 可选：让 LLM 给 graphify 的簇起名
 
-`graphify label .` 会调用 LLM，给每簇起一个语义化的名字，流程不需要这一步。要用的话，只在这一条命令前临时设变量：
+`graphify label <代码根>` 会调用 LLM，给每簇起一个语义化的名字，流程不需要这一步。要用的话，只在这一条命令前临时设变量：
 
 ```bash
-ANTHROPIC_API_KEY=... ANTHROPIC_BASE_URL=... ANTHROPIC_MODEL=... graphify label .
+ANTHROPIC_API_KEY=... ANTHROPIC_BASE_URL=... ANTHROPIC_MODEL=... graphify label <代码根>
 ```
 
 不要 `export` 到全局 shell：全局导出 `ANTHROPIC_*` 会把 Claude Code 本身也切到那个端点。其他后端的变量名见 graphify README 的环境变量表。

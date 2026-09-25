@@ -18,17 +18,18 @@ disable-model-invocation: true
 逐条确认，不满足就停下告诉用户缺什么：
 
 1. **挂载根**：读项目里的 `kb/governance/PATHS.md`（挂载位置不是 `kb/` 的，以用户说的为准），取 `MOUNT_ROOT`。下文逻辑名都按这张表解析。
-2. **项目适配已完成**：`DATA_PROJECT_FACTS` 存在。没有就让用户先走 `GOVERNANCE_FLOW_SETUP`。
-3. **概览在不在**：看 `ENTRY_OVERVIEW` 是否存在，记为 `有概览` / `无概览`，派步 1 和步 6 时传下去。
+2. **项目适配已完成**：`DATA_PROJECT_FACTS` 存在，且有「代码位置」字段。没有就让用户先走 `GOVERNANCE_FLOW_SETUP`。
+3. **代码根**：把「代码位置」登记的每个路径（相对挂载所在仓库根）换算成绝对路径，记为 `<代码根>`，确认都存在。之后所有 codegraph / graphify 命令都带它，派子代理时也传下去（`GOVERNANCE_RULES` 的 `business-rule.md`「codegraph 查询口径」）。
+4. **概览在不在**：看 `ENTRY_OVERVIEW` 是否存在，记为 `有概览` / `无概览`，派步 1 和步 6 时传下去。
 
 ## 步 0 · 工具准备
 
-本会话在项目根目录自己做，命令和期望值都在 `GOVERNANCE_PREPARE`：
+本会话自己做，命令和期望值都在 `GOVERNANCE_PREPARE`；登记了多个代码根的，第 3–5 条逐个代码根做：
 
-1. **命令行**：`codegraph --version`、`graphify --version`。缺哪个就停下，把 `GOVERNANCE_PREPARE` 第 1、2 步给用户，由用户按顺序一个一个装，不替用户安装。
-2. **没接进助手**：跑 `GOVERNANCE_TOOL_SCAN all .`。有输出就停下，把输出和 `GOVERNANCE_PREPARE`「附：以前接入过助手，或扫描有输出」转给用户，清干净再继续——这些改的是用户的全局配置，不替用户改。
-3. **索引**：`.codegraph/` 或 `graphify-out/GRAPH_REPORT.md` 缺哪份，就按 `GOVERNANCE_PREPARE` 第 3 步建哪份（`codegraph init .` / `graphify update .`），并确认两个目录在 `.gitignore` 里。
-4. **刷新**：两份都在的，查询前刷到当前代码：`codegraph sync .`、`graphify update .`。
+1. **命令行**：`codegraph --version`、`graphify --version`。缺哪个就停下，把 `GOVERNANCE_PREPARE` 第一部分给用户，由用户一个一个装，不替用户安装。
+2. **没接进助手**：跑 `GOVERNANCE_TOOL_SCAN all <当前目录>`，代码根不是当前目录的，对每个 `<代码根>` 也跑一次。有输出就停下，把输出和 `GOVERNANCE_PREPARE`「附：扫描有输出怎么清」转给用户，清干净再继续——这些改的是用户的配置，不替用户改。
+3. **索引**：`<代码根>/.codegraph/` 或 `<代码根>/graphify-out/GRAPH_REPORT.md` 缺哪份，就按 `GOVERNANCE_PREPARE` 第 3 步建哪份（先确认排除配置已写，再 `codegraph init <代码根>` / `graphify update <代码根>`）。
+4. **刷新**：第 3 条没有新建的那份，刷到当前代码：`codegraph sync <代码根>`、`graphify update <代码根>`。
 5. **就绪检查**：按 `GOVERNANCE_PREPARE` 第 4 步逐条执行。
 
 全部符合才派步 1。结果（版本号、建了还是刷新了哪份索引、检查逐条结论）写进最后给用户的汇报。
@@ -57,6 +58,7 @@ disable-model-invocation: true
 ```
 读 <本 skill 目录>/steps/<说明文件>，只做这一步。
 - 项目根：<绝对路径>；MOUNT_ROOT：<值>，逻辑名按 <MOUNT_ROOT>governance/PATHS.md 解析
+- 代码根：<每个代码根的绝对路径>；codegraph / graphify 命令一律带它（-p <代码根>、sync/update <代码根>），报告读 <代码根>/graphify-out/GRAPH_REPORT.md
 - 业务：<业务名或入口>；tier：<骨架|细节>；概览：<有概览|无概览>
 - 批次目录：<DATA_BUSINESS_RAW 解析后的路径>/init-<业务id>/（步 1 定出业务前缀后才有 id，步 1 用用户给的业务名的英文短名）
 - 前面步骤的产物：<批次目录下已有的文件>

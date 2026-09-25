@@ -19,11 +19,12 @@
 
 ## 挂到一个项目里
 
-1. 按 [`governance/prepare.md`](governance/prepare.md) 完成准备阶段：一个一个装两个工具的命令行（每装一个扫描一次）、在项目里建两份索引、跑就绪检查。
+1. 按 [`governance/prepare.md`](governance/prepare.md) 第一部分装两个工具的命令行（每台机器一次；一个一个装，每装一个扫描一次，扫描脚本从本仓库克隆目录运行）。
 2. 把 `governance/` 复制到项目的 `kb/governance/`，项目自己的数据放 `kb/data/`（首次挂载时为空）。
 3. 把 `.claude/skills/sum-svg-diagram/`、`.claude/skills/business-rule-init/` 复制到项目的 `.claude/skills/` 下；要用源码调查子代理的，再把 `.claude/agents/code-scout.md` 复制到项目的 `.claude/agents/`。
 4. 挂载位置不是 `kb/` 的，改 `governance/PATHS.md` 里 `MOUNT_ROOT` 一行。
-5. 先走一次 `governance/flow/project-setup.md`（项目适配，一次性），之后按 `governance/flow/README.md` 分诊进各条流程。
+5. 走一次 `governance/flow/project-setup.md`（项目适配，一次性），其中登记「代码位置」：业务代码所在仓库的根目录。
+6. 按 `governance/prepare.md` 第二部分，在登记的代码位置建索引、跑就绪检查。之后按 `governance/flow/README.md` 分诊进各条流程，或直接用 `/business-rule-init` 初始化单条业务规则。
 
 ## 来源
 

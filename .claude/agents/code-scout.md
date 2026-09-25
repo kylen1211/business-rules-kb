@@ -37,7 +37,7 @@ model: sonnet
 - 目标仓还没建索引时，先执行 `codegraph init <仓库>` 和 `graphify update <仓库>` 再查。
 - 首选工具不可用时（没有索引、结果截断、结果不相关），改用 `rg` 或直接读码，并在证据里写明三点：命中的是哪个首选场景、这次为什么不能用、替代手段覆盖到什么程度。
 - 命令一律显式指向目标仓（`-p <仓库>` 或传路径参数）；参数以 `--help` 为准。
-- 只运行查询和建索引类命令；`codegraph install`、`graphify install`、`graphify claude install` 会改助手的全局配置，交回调用方处理。
+- 只运行查询和建索引类命令；`codegraph install`、`graphify install`、`graphify claude install` 会把工具接进 AI 助手（改 `~/.claude` 下的全局配置或项目的 `CLAUDE.md`、`.claude/settings.json`），不运行，交回调用方处理。
 
 ## 取证纪律
 

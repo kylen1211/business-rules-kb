@@ -35,7 +35,7 @@
 | `DATA_IMAGES` | `data/images/` | 全部 SVG 图片 | 数据 |
 | `DATA_LOG` | `data/log.md` | 变更史 | 数据 |
 | `DATA_LESSONS` | `data/lessons.md` | 经验库 | 数据 |
-| `DATA_PROJECT_FACTS` | `data/project-facts.md` | 项目适配事实卡(`GOVERNANCE_FLOW_SETUP` 前置阶段产出,记录本项目名称/主语言运行时/标准排除句用词/代码索引排除路径等,供三条常规流程与规则文件引用取值,不需回头编辑规则文件本身) | 数据 |
+| `DATA_PROJECT_FACTS` | `data/project-facts.md` | 项目适配事实卡(`GOVERNANCE_FLOW_SETUP` 前置阶段产出,记录本项目名称/主语言运行时/标准排除句用词/代码位置/代码索引排除路径等,供三条常规流程与规则文件引用取值,不需回头编辑规则文件本身) | 数据 |
 | `DATA_OVERVIEW_EXCLUDE` | `data/overview-exclude.md` | 已核实的项目专属"未分类默认排除"例外记录(增量追加) | 数据 |
 
 ## 例外(不查表,直接写字面路径)

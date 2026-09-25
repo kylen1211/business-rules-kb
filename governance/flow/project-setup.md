@@ -3,7 +3,7 @@
 > 治理入口见 `ENTRY_AGENTS`;入口分诊见 `GOVERNANCE_FLOW` 的 `README.md`(本阶段是分诊判据的执行前提,不占分诊编号)。
 > 用于本体系**首次挂载到某个项目**,或体系版本升级后需要重新核对适配数据。
 > **本阶段只产出项目专属数据,产出位置是 `DATA_PROJECT_FACTS`(定义见 `ENTRY_PATHS`),不改动 `GOVERNANCE_RULES`/`GOVERNANCE_FLOW` 下任何方法论文件正文**——这是本阶段存在的唯一理由:换项目时只需要在这里填一次数据,不需要回头编辑规则/流程文件本身(此前挂载新项目时曾出现过手改 `overview-rules.md`/`overview-exclude.md`/流程文件正文才能用的情形,本阶段是对该问题的直接修复)。
-> **前提**:已完成准备阶段 `GOVERNANCE_PREPARE`(装代码查询工具、建索引)。那一步不属于流程,本阶段不做、不检查。
+> **前提**:已完成准备阶段 `GOVERNANCE_PREPARE` 第一部分(装命令行)。本阶段登记的「代码位置」是其第二部分(建索引)的输入;本阶段完成后做第二部分,再进三条常规流程。准备阶段不属于流程,本阶段不做、不检查。
 > 完成本阶段前,三条常规流程(业务初始化 `GOVERNANCE_FLOW_INIT`、业务更新 `GOVERNANCE_FLOW_UPDATE`、概览初始化 `overview-init.md`)均不具备执行前提;完成后除非体系版本升级要求重新核对,不需要重跑。
 
 共一步(判断类,信息充分时可一次做完;信息不全时允许分批补齐,见"注意")。
@@ -17,8 +17,9 @@
    - **项目名**:取仓库目录名或承载文档自称的项目名,与 `overview-rules.md` 一节的项目名取法一致,不另立第二套取法。
    - **主语言 / 运行时**:如实记录(可以是多个,如"TypeScript/Node ESM + 若干 Python 脚本"),不强行归一成一种。
    - **标准排除句用词清单**:业务代码调用、但内部实现不需要本体系索引的第三方框架/运行时/SDK 具体名称(如某项目的 Node 运行时、MCP SDK;另一项目的 Python asyncio、pipecat)——供 `GOVERNANCE_FLOW_INIT` 的 `step1-overview.md`、`GOVERNANCE_FLOW_UPDATE` 的 `step3-extract.md` 里的标准排除句直接引用取值,不必每次重新论证具体该写哪个框架名。
-   - **代码索引排除路径**:会让同一份代码被索引两次的路径(符号链接、生成副本等),codegraph/graphify 查询结果按它排除,用法见 `GOVERNANCE_RULES` 的 `business-rule.md`「codegraph 查询口径」;没有就写「无」。查法:`find . \( -name .git -o -name node_modules -o -name .venv \) -prune -o -type l -print` 找出指向项目内代码的符号链接。
-3. 写入 `DATA_PROJECT_FACTS`(新建或覆盖),字段固定五项:项目名 / 主语言运行时 / 标准排除句用词清单 / 代码索引排除路径 / 完成日期。
+   - **代码位置**:业务代码所在仓库的根目录,写相对挂载所在仓库根的路径(代码与 kb 同仓写 `.`);代码分在多个仓库就逐行列出,每行 `<名称>: <路径>`。codegraph/graphify 的建索引与全部查询都按它带路径执行(不带路径时两个工具只认当前目录),用法见 `GOVERNANCE_RULES` 的 `business-rule.md`「codegraph 查询口径」。
+   - **代码索引排除路径**:会让同一份代码被索引两次的路径(符号链接、生成副本等),建索引时写进官方排除配置(见 `GOVERNANCE_PREPARE` 第 3 步);没有就写「无」。查法:`find . \( -name .git -o -name node_modules -o -name .venv \) -prune -o -type l -print` 找出指向项目内代码的符号链接。
+3. 写入 `DATA_PROJECT_FACTS`(新建或覆盖),字段固定六项:项目名 / 主语言运行时 / 标准排除句用词清单 / 代码位置 / 代码索引排除路径 / 完成日期。
 
 ### 产出
 
@@ -33,12 +34,13 @@
 
 ### 通过判据
 
-`DATA_PROJECT_FACTS` 文件存在且五个字段(项目名 / 主语言运行时 / 标准排除句用词清单 / 代码索引排除路径 / 完成日期)均非空;`ENTRY_PATHS` 的 `MOUNT_ROOT` 行与本项目实际挂载位置一致。
+`DATA_PROJECT_FACTS` 文件存在且六个字段(项目名 / 主语言运行时 / 标准排除句用词清单 / 代码位置 / 代码索引排除路径 / 完成日期)均非空,「代码位置」登记的每个路径都存在;`ENTRY_PATHS` 的 `MOUNT_ROOT` 行与本项目实际挂载位置一致。
 
 ### 引用的规则条款
 
 - 路径表机制与例外(`ENTRY_PATHS` 本文件)
 - 项目名取法(`GOVERNANCE_RULES` 的 `overview-rules.md` 一)
 - 标准排除句的消费方式(`GOVERNANCE_FLOW_INIT` 的 `step1-overview.md`、`GOVERNANCE_FLOW_UPDATE` 的 `step3-extract.md`)
-- 代码索引排除路径的消费方式(`GOVERNANCE_RULES` 的 `business-rule.md`「codegraph 查询口径」)
+- 代码位置的消费方式(`GOVERNANCE_RULES` 的 `business-rule.md`「codegraph 查询口径」、`GOVERNANCE_PREPARE` 第二部分)
+- 代码索引排除路径的消费方式(`GOVERNANCE_PREPARE` 第 3 步)
 - 配件行判定方法(`GOVERNANCE_RULES` 的 `overview-rules.md` 四·4.2/4.3,本阶段不重复其判据,只作前置事实准备)

@@ -7,7 +7,7 @@
 看全貌——graphify 圈出这个业务经过的文件;定业务前缀;列出有哪几条链路;写管什么 / 不管什么。**文件清单只记录链路实际触碰到的全部文件,不做归属判断**(文件本身被多业务共用是正常现象,不等于规则冲突;归属判断粒度下放到步 2 / 步 3 的函数/常量层级)。
 
 **工具口径**:
-- graphify 在本步**仅用于圈文件范围**——只读 `GRAPH_REPORT.md` 的 God Nodes / Communities 段定位该业务大致涉及哪些文件,**不用其社区分组结果作业务划分依据**(社区分组是代码结构聚类,不等同业务边界);不读 `wiki/`。
+- graphify 在本步**仅用于圈文件范围**——只读 `<代码根>/graphify-out/GRAPH_REPORT.md` 的 God Nodes / Communities 段定位该业务大致涉及哪些文件,**不用其社区分组结果作业务划分依据**(社区分组是代码结构聚类,不等同业务边界);不读 `wiki/`。
 - 需要用 codegraph 核对符号(callers/callees/node)时,按 `GOVERNANCE_RULES` 的 `business-rule.md`「codegraph 查询口径」执行。
 
 ## 产出
