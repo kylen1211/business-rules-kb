@@ -12,12 +12,22 @@
 
 ## 2. 为什么只装命令行、不接进 AI 助手
 
-两个工具的官方安装都分两步：第一步装命令行，第二步把工具接进 AI 助手。**本体系只做第一步。**第二步会往助手里注入这些东西：
+两个工具的官方安装都分两步：第一步装命令行，第二步把工具接进 AI 助手。**本体系只做第一步。**
 
-- `codegraph install`：写入 MCP server、`CLAUDE.md` 片段、每轮提示词 hook。
-- `graphify install` / `graphify claude install`：写入 skill、`CLAUDE.md` 段落，以及一个 PreToolUse hook。只要当前目录有 `graphify-out/graph.json`，每次 Grep/Read 前它都会强制要求先跑 `graphify query`，不管问的是哪类问题。
+第二步会往助手里注入下表这些东西。它们都在告诉 AI「查代码先用我」：codegraph 的要求先查符号，graphify 的要求先查图，而且不分问的是哪类问题。两边同时注入就会互相冲突，也和本体系「按场景选工具」的口径冲突。这套配置实际用过，也遇到了这个问题；后来把注入全部拆掉，两个工具只保留命令行、手动调用，需要成规模调查源码时交给专门的子代理（第 7 节）。
 
-两边同时注入，会抢着决定「查代码用哪个工具」，和本体系「按场景选工具」的口径冲突。所以两个工具都只保留命令行，靠手动调用；需要成规模地调查源码时，交给专门的子代理（第 7 节）。
+| 注入项 | 由谁写入 | 注入了什么 | 处置 |
+|---|---|---|---|
+| codegraph MCP server | `codegraph install` | MCP 工具 + 初始化时下发的使用说明，要求会话优先用它查代码 | 拆除 |
+| codegraph 提示词 hook | `codegraph install` | UserPromptSubmit hook，每轮对话往上下文里塞 codegraph 数据 | 拆除 |
+| codegraph 说明段 | `codegraph install` | 在 `CLAUDE.md` / `AGENTS.md` 写一段带标记的使用说明 | 拆除 |
+| codegraph 权限 | `codegraph install` | settings 里自动放行 `mcp__codegraph__*` | 拆除 |
+| graphify skill | `graphify install` | 在 `~/.claude/skills/graphify/` 放 skill | 拆除 |
+| graphify 读前 hook | `graphify claude install` | PreToolUse hook：目录里有 `graphify-out/graph.json` 时，每次 Grep/Read/Glob 前都强制要求先跑 `graphify query` | 拆除 |
+| graphify 说明段 | `graphify claude install` | 在 `CLAUDE.md` 写一段 graphify 说明 | 拆除 |
+| 提交后刷新索引 | `graphify hook install`、旧版 `codegraph init` | 只在 `.git/hooks/` 里跑 `codegraph sync`、`graphify update`，不进 AI 上下文 | 保留（可选，见第 5 节） |
+
+要注意会「自愈回写」的情形：`codegraph upgrade` 会重写已接入过的助手配置，重跑 `codegraph install` 的默认选项全是「是」。所以升级或误跑之后，按第 6 节重新检查。
 
 ## 3. 安装
 
@@ -42,7 +52,6 @@ uv tool install graphifyy      # 或：pipx install graphifyy
 
 - codegraph：`codegraph uninstall` 把它从助手里摘掉。先看 `codegraph uninstall --help`：新版带 `--keep-cli` 参数，要加上，否则会连命令行本身一起卸掉；1.5.0 没有这个参数，只摘助手配置。
 - graphify：`graphify uninstall`（不加 `--purge`，就会保留各项目的 `graphify-out/`）。
-- `codegraph upgrade` 会自动重写已经接入过的助手配置。所以升级前确认已经摘干净，升级后再跑一遍第 6 节检查。
 
 ## 4. 在项目里建索引
 
@@ -88,7 +97,9 @@ graphify 对应的是 `graphify hook install`，也只装 git hooks。
 | 索引已建 | `ls .codegraph graphify-out/GRAPH_REPORT.md` | 都存在 |
 | 能查到符号 | `codegraph node "<项目里一个确定存在的函数名>" -p .` | 输出含 `**Location:**` |
 | 没接进助手 | `claude mcp list` | 不含 codegraph |
-| 没有 hook 注入 | `grep -nE "graphify\|codegraph" ~/.claude/settings.json .claude/settings*.json` | 无命中 |
+| 没有 hook 和权限注入 | `grep -nE "graphify\|codegraph" ~/.claude/settings.json .claude/settings*.json` | 无命中 |
+| 没有 skill | `ls ~/.claude/skills .claude/skills \| grep -iE "graphify\|codegraph"` | 无命中 |
+| 没有说明段 | `grep -nE "graphify\|codegraph" ~/.claude/CLAUDE.md CLAUDE.md AGENTS.md` | 无命中（只查项目根目录的文件，`kb/governance/` 里的方法论文件本来就会提到这两个工具） |
 
 **判「查不到」看输出，不看退出码**：符号不存在时 `codegraph node` 输出 `Symbol "..." not found in the codebase`，退出码仍是 0。
 
