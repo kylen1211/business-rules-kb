@@ -2,7 +2,7 @@
 
 > 本阶段不属于流程，不产出 kb 数据，只让本机和项目具备查代码的条件。分两部分，夹在项目适配前后：
 > **第一部分（每台机器一次）→ `GOVERNANCE_FLOW_SETUP` 项目适配（登记「代码位置」）→ 第二部分（每个项目一次）→ 各条流程。**
-> 依据：两个工具官方安装说明的前两步（codegraph README「Get Started」、graphify 0.9.37 PyPI 说明「Install」），第 1 步装命令行，第 2 步把工具接进 AI 助手。**本体系只做第 1 步。** 核实版本：codegraph 1.5.0、graphify 0.9.37（2026-09-25）。
+> 依据：两个工具官方安装说明的前两步（codegraph README「Get Started」、graphify 0.9.37 PyPI 说明「Install」），第 1 步装命令行，第 2 步把工具接进 AI 助手。**本体系只做第 1 步。** **版本锁定为本机现状：codegraph 1.5.0、graphify 0.9.37**（2026-09-25 核实；安装命令都带版本号，不装最新版）。要升级的，先在隔离环境按本页重新核实再改版本号。
 > 两个工具各管什么、为什么不接进助手、改代码后怎么刷新，见 `GOVERNANCE_TOOL_SETUP`。
 
 **扫描脚本** `GOVERNANCE_TOOL_SCAN`，下文写作 `<扫描>`：只读不删，按注入特征查 Claude Code 的配置，输出为空就是干净。挂载前从 business-rules-kb 的克隆目录运行 `governance/scripts/tool-residue-scan.sh`；挂载到 `kb/` 后是 `kb/governance/scripts/tool-residue-scan.sh`。参数是工具名和要查的目录：查启动 Claude Code 的那个目录。
@@ -14,16 +14,17 @@
 ### 1. 装 codegraph
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.sh | CODEGRAPH_VERSION=v1.5.0 sh
 ```
+
+`CODEGRAPH_VERSION` 是安装脚本自带的版本参数（脚本头部「Environment」一节），不带就装最新版。
 
 官方原话：「**This is the step that connects CodeGraph to your agent; installing the CLI in step 1 does not do it on its own.**」——安装脚本只把程序放进 `~/.codegraph/`，在 `~/.local/bin/` 建一个链接。官方的下一步 `codegraph install` 不跑。
 
 新开一个终端：
 
 ```bash
-codegraph --version
-codegraph telemetry off          # 官方默认开启匿名使用统计，关掉
+codegraph --version              # 应为 1.5.0
 <扫描> codegraph .               # 输出为空才继续
 ```
 
@@ -32,13 +33,13 @@ codegraph telemetry off          # 官方默认开启匿名使用统计，关掉
 前提：Python 3.10+ 和 uv（官方「Prerequisites」；没有 uv 的按官方表格装）。
 
 ```bash
-uv tool install graphifyy        # PyPI 包名是双 y 的 graphifyy，命令名是 graphify
+uv tool install graphifyy==0.9.37   # PyPI 包名是双 y 的 graphifyy，命令名是 graphify
 ```
 
 官方第 2 步 `graphify install`（登记 skill）和「Make your assistant always use the graph」一节的 `graphify claude install`（写说明段和读前 hook）都不跑。graphify 官方说明写明没有遥测。
 
 ```bash
-graphify --version
+graphify --version               # 应为 0.9.37
 <扫描> graphify .                # 输出为空才继续
 ```
 
@@ -99,8 +100,6 @@ graphify update <代码根>
 ## 附：扫描有输出怎么清
 
 只清 Claude Code 这一处。一个工具清完、扫描为空，再清下一个。
-
-**遥测开启**：`codegraph telemetry off`。
 
 **codegraph**（官方：`codegraph uninstall`「strips CodeGraph's MCP server config, instructions, and permissions」）：
 

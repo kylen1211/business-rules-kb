@@ -88,8 +88,4 @@ if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   done
 fi
 
-# codegraph 遥测默认开启，会上报匿名使用统计
-if want codegraph && command -v codegraph >/dev/null 2>&1; then
-  codegraph telemetry status 2>/dev/null | grep -q "Telemetry: enabled" && echo "遥测开启  codegraph  「运行 codegraph telemetry off」"
-fi
 exit 0

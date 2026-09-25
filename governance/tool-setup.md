@@ -1,7 +1,7 @@
 # 代码查询工具：说明与日常使用
 
 > 本体系核对规则和代码时要用两个命令行工具：`codegraph` 和 `graphify`。装命令行、建索引、就绪检查属于准备阶段，见 `GOVERNANCE_PREPARE`；本页讲为什么不接进助手、日常怎么用。
-> 实测版本：codegraph 1.5.0、graphify 0.9.37（2026-09-25）。
+> 版本锁定为本机现状：codegraph 1.5.0、graphify 0.9.37（2026-09-25 核实）。
 
 ## 1. 两个工具各管什么
 
@@ -32,7 +32,7 @@
 
 以前接入过要清理的，按 `GOVERNANCE_PREPARE`「附：扫描有输出怎么清」。
 
-升级：`codegraph upgrade` 会自动跑 `codegraph install --refresh`，官方说明是「Rewrite what previous installs configured, for already-configured agents only (never adds new ones)」——只装命令行时没有已接入的助手，不会写。升级后跑一次 `GOVERNANCE_TOOL_SCAN` 确认即可。
+升级：版本锁定在本机现状，不随手升级（`codegraph upgrade`、`uv tool upgrade graphifyy` 都不跑）。确实要升的，先在隔离环境按 `GOVERNANCE_PREPARE` 重新核实，再改那里的版本号。参考：`codegraph upgrade` 会自动跑 `codegraph install --refresh`，官方说明是「Rewrite what previous installs configured, for already-configured agents only (never adds new ones)」——只装命令行时没有已接入的助手，不会写。升级后跑一次 `GOVERNANCE_TOOL_SCAN` 确认即可。
 
 ## 3. 查询前先刷新
 

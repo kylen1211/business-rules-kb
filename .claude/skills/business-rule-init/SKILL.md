@@ -43,14 +43,13 @@ disable-model-invocation: true
 
    ```bash
    # codegraph：官方安装脚本只放程序进 ~/.codegraph/、在 ~/.local/bin/ 建链接，不接入助手
-   curl -fsSL https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.sh | sh
-   ~/.local/bin/codegraph --version
-   ~/.local/bin/codegraph telemetry off          # 官方默认开启匿名使用统计
+   curl -fsSL https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.sh | CODEGRAPH_VERSION=v1.5.0 sh
+   ~/.local/bin/codegraph --version              # 应为 1.5.0
    <GOVERNANCE_TOOL_SCAN> codegraph <项目根>     # 输出为空才继续
 
    # graphify：前提 Python 3.10+ 与 uv；PyPI 包名是双 y 的 graphifyy
-   uv tool install graphifyy
-   graphify --version
+   uv tool install graphifyy==0.9.37
+   graphify --version                            # 应为 0.9.37
    <GOVERNANCE_TOOL_SCAN> graphify <项目根>      # 输出为空才继续
    ```
 
