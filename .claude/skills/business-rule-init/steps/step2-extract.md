@@ -4,7 +4,7 @@
 
 ## 范围
 
-读步 1 文件清单内代码，ast 列全部 raise / return / 分支，一出口一行，写代码位置，**每行带临时编号（F 号，见 `GOVERNANCE_RULES` 的 `assembly-rules.md` 三·五）**。
+读步 1 文件清单内代码（路径相对 `<代码根>`；带 `<名称>:` 前缀的到对应代码根下读），ast 列全部 raise / return / 分支，一出口一行，写代码位置，**每行带临时编号（F 号，见 `GOVERNANCE_RULES` 的 `assembly-rules.md` 三·五）**。
 
 ## 产出
 

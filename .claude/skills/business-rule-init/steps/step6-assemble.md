@@ -5,10 +5,10 @@
 ## 范围
 
 1. **先查页是否已存在**（按标题/前缀 grep `DATA_BUSINESS` 下有无同前缀页）。存在 → 不属于初始化范围，本步到此停止，回执报「停止」并如实写「页已存在」和那一页的路径，不自行断言该改走更新；不存在 → 继续。
-2. 只吃 raw（批次目录 `step3-raw.md`），按 `GOVERNANCE_RULES` 的 `business-rule.md` 二的六节槽位与 `assembly-rules.md` 三的模板，生成 `DATA_BUSINESS` 下 `<业务id>.md`。
-3. **图槽位**：业务全貌图槽位、流程文字节各链路的图槽位，一律写标准真链接一行（写法见 `GOVERNANCE_RULES` 的 `diagram-rules.md` 五），链接目标为约定文件名（`DATA_IMAGES` 下 `<业务id>-overview.svg`、`<业务id>-<链路名>.svg`）。约定文件名当前不存在的，**机械复制项目里 `.claude/skills/sum-svg-diagram/assets/placeholder-pending.svg` 到该文件名占位**，不判断「要不要画」、不现画图、不改图。
-4. **页头基线 commit**：取本步组装落盘时仓库的 HEAD 短 sha，不是读代码/开始执行那一刻的 commit；组装期间有与本业务无关的提交，仍取当次 HEAD，不回溯——基线标注的是「这一页是对着哪个版本的仓库核过的」。
-5. **`DATA_LOG` 追一行**：`rule-init` 类型，格式与位置见 `GOVERNANCE_RULES` 的 `assembly-rules.md` 五（新条目插在 `# Wiki Log` 标题正下方，同时把 frontmatter 的 `updated` 刷成当天）。`DATA_LOG` 不存在时新建，内容如下，再按上面追加：
+2. 只吃 raw（批次目录 `step3-raw.md`），按 `GOVERNANCE_RULES` 的 `business-rule.md` 二的六节槽位与 `assembly-rules.md` 三的模板，生成 `DATA_BUSINESS` 下 `<业务id>.md`（目录不存在就建）。
+3. **图槽位**：业务全貌图槽位、流程文字节各链路的图槽位，一律写标准真链接一行（写法见 `GOVERNANCE_RULES` 的 `diagram-rules.md` 五），链接目标为约定文件名（`DATA_IMAGES` 下 `<业务id>-overview.svg`、`<业务id>-<链路名>.svg`）。`DATA_IMAGES` 目录不存在就建。约定文件名当前不存在的，**机械复制项目里 `.claude/skills/sum-svg-diagram/assets/placeholder-pending.svg` 到该文件名占位**，不判断「要不要画」、不现画图、不改图。
+4. **页头基线 commit**：取**代码根所在仓库**本步组装落盘时的 HEAD 短 sha（`git -C <代码根> rev-parse --short HEAD`；代码根就是项目根时即项目仓库的 HEAD；登记了多个代码根的，写成 `<名称>@<sha>` 逐个列出），不是读代码/开始执行那一刻的 commit；组装期间有与本业务无关的提交，仍取当次 HEAD，不回溯——基线标注的是「这一页是对着哪个版本的仓库核过的」。
+5. **`DATA_LOG` 追一行**：`rule-init` 类型，`commit:` 字段与页头基线同值，格式与位置见 `GOVERNANCE_RULES` 的 `assembly-rules.md` 五（新条目插在 `# Wiki Log` 标题正下方，同时把 frontmatter 的 `updated` 刷成当天）。`DATA_LOG` 不存在时新建，内容如下，再按上面追加：
 
    ```markdown
    ---

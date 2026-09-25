@@ -22,8 +22,8 @@
 2. 把 `governance/` 复制到项目的 `kb/governance/`，项目自己的数据放 `kb/data/`（首次挂载时为空）。
 3. 把 `.claude/skills/sum-svg-diagram/`、`.claude/skills/business-rule-init/` 复制到项目的 `.claude/skills/` 下。
 4. 挂载位置不是 `kb/` 的，改 `governance/PATHS.md` 里 `MOUNT_ROOT` 一行。
-5. 走一次 `governance/flow/project-setup.md`（项目适配，一次性），其中登记「代码位置」：业务代码所在仓库的根目录。
-6. 按 `governance/prepare.md` 第二部分，在登记的代码位置建索引、跑就绪检查。之后按 `governance/flow/README.md` 分诊进各条流程，或直接用 `/business-rule-init` 初始化单条业务规则。
+5. 只初始化单条业务规则的，到这里就可以直接用 `/business-rule-init`：它会先登记路径和项目事实、检查工具、建索引，再走初始化各步。
+6. 走完整流程的：先走一次 `governance/flow/project-setup.md`（项目适配，一次性，其中登记「代码位置」：业务代码所在仓库的根目录），再按 `governance/prepare.md` 第二部分在登记的代码位置建索引、跑就绪检查，之后按 `governance/flow/README.md` 分诊进各条流程。
 
 ## 来源
 
