@@ -1,0 +1,240 @@
+<!-- sum-svg-diagram · flow master(业务流程图骨架母版)· v2.0.0 -->
+<!-- 铁律:浅色底 + 泳道横带纵向堆叠(圆角虚线彩色容器 + 左上角彩色标签芯片)+ 泳道内步骤卡片自左向右横排(头部编号来源芯片 + 粗标题 + bullet 要点行,判定语义写进 bullets,不用菱形)+ 拒绝出口为玫红卡片放在所属泳道右端 + 连线三类语义(主链路蓝实线 / 校验链橙实线 / 拒绝路径红虚线)+ 药丸标签标注连线结果或衔接说明 + 跨泳道衔接用带药丸标签的折线 + 底部 💡 核心提示行与横排图例 + 绘制层序背景→容器→连线→卡片→文字→药丸→图例,均不可改;可调:泳道数 / 每道卡片数 / 连线数 / 画布尺寸随内容线性伸缩,全部占位文字须替换为真实内容 -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1030" width="100%" height="100%" text-rendering="geometricPrecision" shape-rendering="geometricPrecision">
+  <defs>
+    <filter id="card-shadow" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.06"/>
+    </filter>
+    <filter id="badge-shadow" x="-10%" y="-10%" width="120%" height="130%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0F172A" flood-opacity="0.08"/>
+    </filter>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2563EB"/>
+    </marker>
+    <marker id="arrow-orange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#EA580C"/>
+    </marker>
+    <marker id="arrow-rose" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#E11D48"/>
+    </marker>
+  </defs>
+
+  <style>
+    text {
+      font-family: 'Noto Sans CJK SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    .header-title { font-size: 28px; font-weight: 800; fill: #0F172A; letter-spacing: -0.5px; }
+    .header-sub { font-size: 14.5px; font-weight: 500; fill: #64748B; }
+    .layer-tag { font-size: 12.5px; font-weight: 700; }
+    .card-title { font-size: 16px; font-weight: 700; fill: #0F172A; }
+    .card-tag-text { font-size: 11px; font-weight: 700; }
+    .card-bullet { font-size: 13px; font-weight: 400; fill: #334155; }
+    .card-bullet-bold { font-weight: 600; fill: #0F172A; }
+    .pill-text { font-size: 10.5px; font-weight: 600; }
+    .corridor-pill-text { font-size: 11.5px; font-weight: 800; fill: #1E40AF; }
+  </style>
+  <rect x="0" y="0" width="1600" height="1030" fill="#FFFFFF"/>
+
+  <!-- Header -->
+  <text x="45" y="55" class="header-title">「业务名」· 完整业务流程(占位标题)</text>
+  <text x="45" y="85" class="header-sub">链路A 阶段名占位 + 链路B 阶段名占位 + 链路C 阶段名占位 · 事实源「路径占位」· 基线「commit占位」</text>
+  <rect x="1330" y="33" width="225" height="38" rx="19" fill="#EFF6FF" stroke="#3B82F6" stroke-width="1.5"/>
+  <circle cx="1348" cy="52" r="5" fill="#10B981"/>
+  <text x="1362" y="57" font-size="13" font-weight="700" fill="#1E40AF">「模块名」v1(占位)</text>
+
+  <!-- ============ Lane containers ============ -->
+  <rect x="30" y="110" width="1540" height="250" rx="16" fill="#F8FAFC" stroke="#60A5FA" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <rect x="45" y="123" width="460" height="26" rx="6" fill="#DBEAFE"/>
+  <text x="55" y="141" class="layer-tag" fill="#1E40AF">泳道1 · 链路A 名称(触发时机 · 执行频次占位)</text>
+
+  <rect x="30" y="400" width="1540" height="230" rx="16" fill="#FAF5FF" stroke="#A855F7" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <rect x="45" y="413" width="460" height="26" rx="6" fill="#F3E8FF"/>
+  <text x="55" y="431" class="layer-tag" fill="#6B21A8">泳道2 · 链路B 名称(校验链 · 执行时机占位)</text>
+
+  <rect x="30" y="670" width="1540" height="230" rx="16" fill="#F0FDF4" stroke="#34D399" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <rect x="45" y="683" width="400" height="26" rx="6" fill="#DCFCE7"/>
+  <text x="55" y="701" class="layer-tag" fill="#166534">泳道3 · 链路C 名称(装配与产出 · 占位)</text>
+
+  <!-- ============ Connectors ============ -->
+  <!-- Lane 1 -->
+  <path d="M 440,247.5 L 610,247.5" stroke="#2563EB" stroke-width="2.5" fill="none" marker-end="url(#arrow-blue)"/>
+  <path d="M 990,247.5 L 1160,247.5" stroke="#E11D48" stroke-width="2.5" stroke-dasharray="6 4" fill="none" marker-end="url(#arrow-rose)"/>
+
+  <!-- Cross-lane corridor 1 -> 2 -->
+  <path d="M 800,335 L 800,380 L 190,380 L 190,450" stroke="#2563EB" stroke-width="2.5" fill="none" marker-end="url(#arrow-blue)"/>
+
+  <!-- Lane 2 -->
+  <path d="M 320,537.5 L 450,537.5" stroke="#EA580C" stroke-width="2.5" fill="none" marker-end="url(#arrow-orange)"/>
+  <path d="M 710,537.5 L 800,537.5" stroke="#EA580C" stroke-width="2.5" fill="none" marker-end="url(#arrow-orange)"/>
+  <path d="M 1060,537.5 L 1180,537.5" stroke="#E11D48" stroke-width="2.5" stroke-dasharray="6 4" fill="none" marker-end="url(#arrow-rose)"/>
+
+  <!-- Cross-lane corridor 2 -> 3 -->
+  <path d="M 930,600 L 930,650 L 460,650 L 460,720" stroke="#2563EB" stroke-width="2.5" fill="none" marker-end="url(#arrow-blue)"/>
+
+  <!-- Lane 3 -->
+  <path d="M 650,795 L 780,795" stroke="#2563EB" stroke-width="2.5" fill="none" marker-end="url(#arrow-blue)"/>
+  <path d="M 1160,795 L 1270,795" stroke="#2563EB" stroke-width="2.5" fill="none" marker-end="url(#arrow-blue)"/>
+
+  <!-- ============ CARD 1.1 ============ -->
+  <g filter="url(#card-shadow)">
+    <rect x="60" y="160" width="380" height="175" rx="14" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5"/>
+    <rect x="72" y="172" width="150" height="20" rx="4" fill="#DBEAFE"/>
+    <text x="78" y="186" class="card-tag-text" fill="#1D4ED8">步骤 A1 · 来源占位</text>
+    <text x="72" y="210" class="card-title">步骤名称占位</text>
+    <text x="72" y="238" class="card-bullet"><tspan class="card-bullet-bold">• 触发时机</tspan> 触发条件说明占位</text>
+    <text x="72" y="264" class="card-bullet"><tspan class="card-bullet-bold">• 处理内容</tspan> 处理逻辑说明占位</text>
+    <text x="72" y="290" class="card-bullet"><tspan class="card-bullet-bold">• 产出物</tspan> 产出结果说明占位</text>
+  </g>
+
+  <!-- ============ CARD 1.2 ============ -->
+  <g filter="url(#card-shadow)">
+    <rect x="610" y="160" width="380" height="175" rx="14" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5"/>
+    <rect x="622" y="172" width="150" height="20" rx="4" fill="#DBEAFE"/>
+    <text x="628" y="186" class="card-tag-text" fill="#1D4ED8">步骤 A2 · 来源占位</text>
+    <text x="622" y="210" class="card-title">步骤名称占位</text>
+    <text x="622" y="238" class="card-bullet"><tspan class="card-bullet-bold">• 判定输入</tspan> 判定依据说明占位</text>
+    <text x="622" y="264" class="card-bullet"><tspan class="card-bullet-bold">• 通过条件</tspan> 通过条件说明占位</text>
+    <text x="622" y="290" class="card-bullet"><tspan class="card-bullet-bold">• 不通过</tspan> 触发右侧拒绝出口占位</text>
+  </g>
+
+  <!-- ============ CARD reject exit (lane 1) ============ -->
+  <g filter="url(#card-shadow)">
+    <rect x="1160" y="160" width="380" height="175" rx="14" fill="#FFF1F2" stroke="#FB7185" stroke-width="1.5"/>
+    <rect x="1172" y="172" width="80" height="20" rx="4" fill="#FFE4E6"/>
+    <text x="1178" y="186" class="card-tag-text" fill="#BE123C">拒绝出口</text>
+    <text x="1172" y="210" class="card-title" fill="#881337">终态名称占位</text>
+    <text x="1172" y="238" class="card-bullet"><tspan class="card-bullet-bold">• 触发来源</tspan> 来源占位</text>
+    <text x="1172" y="264" class="card-bullet"><tspan class="card-bullet-bold">• 后果</tspan> 后果说明占位</text>
+    <text x="1172" y="290" class="card-bullet"><tspan class="card-bullet-bold">• 性质</tspan> 性质说明占位</text>
+  </g>
+
+  <!-- ============ CARD 2.1 ============ -->
+  <g filter="url(#card-shadow)">
+    <rect x="60" y="450" width="260" height="150" rx="14" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5"/>
+    <rect x="72" y="462" width="110" height="20" rx="4" fill="#F3E8FF"/>
+    <text x="78" y="476" class="card-tag-text" fill="#7E22CE">校验① · 来源占位</text>
+    <text x="72" y="500" class="card-title">校验步骤名称占位</text>
+    <text x="72" y="528" class="card-bullet"><tspan class="card-bullet-bold">• 校验对象</tspan> 对象说明占位</text>
+    <text x="72" y="554" class="card-bullet"><tspan class="card-bullet-bold">• 规则</tspan> 规则说明占位</text>
+  </g>
+
+  <!-- ============ CARD 2.2 ============ -->
+  <g filter="url(#card-shadow)">
+    <rect x="450" y="450" width="260" height="150" rx="14" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5"/>
+    <rect x="462" y="462" width="110" height="20" rx="4" fill="#F3E8FF"/>
+    <text x="468" y="476" class="card-tag-text" fill="#7E22CE">校验② · 来源占位</text>
+    <text x="462" y="500" class="card-title">校验步骤名称占位</text>
+    <text x="462" y="528" class="card-bullet"><tspan class="card-bullet-bold">• 校验对象</tspan> 对象说明占位</text>
+    <text x="462" y="554" class="card-bullet"><tspan class="card-bullet-bold">• 规则</tspan> 规则说明占位</text>
+  </g>
+
+  <!-- ============ CARD 2.3 ============ -->
+  <g filter="url(#card-shadow)">
+    <rect x="800" y="450" width="260" height="150" rx="14" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5"/>
+    <rect x="812" y="462" width="110" height="20" rx="4" fill="#F3E8FF"/>
+    <text x="818" y="476" class="card-tag-text" fill="#7E22CE">校验③ · 来源占位</text>
+    <text x="812" y="500" class="card-title">校验步骤名称占位</text>
+    <text x="812" y="528" class="card-bullet"><tspan class="card-bullet-bold">• 校验对象</tspan> 对象说明占位</text>
+    <text x="812" y="554" class="card-bullet"><tspan class="card-bullet-bold">• 不通过</tspan> 触发右侧拒绝出口占位</text>
+  </g>
+
+  <!-- ============ CARD reject exit (lane 2, shared) ============ -->
+  <g filter="url(#card-shadow)">
+    <rect x="1180" y="450" width="360" height="150" rx="14" fill="#FFF1F2" stroke="#FB7185" stroke-width="1.5"/>
+    <rect x="1192" y="462" width="120" height="20" rx="4" fill="#FFE4E6"/>
+    <text x="1198" y="476" class="card-tag-text" fill="#BE123C">拒绝出口(共享)</text>
+    <text x="1192" y="500" class="card-title" fill="#881337">终态名称占位</text>
+    <text x="1192" y="528" class="card-bullet"><tspan class="card-bullet-bold">• 入口①②③</tspan> 各校验失败后果占位</text>
+    <text x="1192" y="554" class="card-bullet"><tspan class="card-bullet-bold">• 性质</tspan> 一次性列出缺失项占位</text>
+  </g>
+
+  <!-- ============ CARD 3.1 ============ -->
+  <g filter="url(#card-shadow)">
+    <rect x="270" y="720" width="380" height="150" rx="14" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5"/>
+    <rect x="282" y="732" width="130" height="20" rx="4" fill="#DCFCE7"/>
+    <text x="288" y="746" class="card-tag-text" fill="#15803D">装配① · 来源占位</text>
+    <text x="282" y="770" class="card-title">装配步骤名称占位</text>
+    <text x="282" y="798" class="card-bullet"><tspan class="card-bullet-bold">• 输入</tspan> 输入来源说明占位</text>
+    <text x="282" y="824" class="card-bullet"><tspan class="card-bullet-bold">• 处理</tspan> 处理逻辑说明占位</text>
+  </g>
+
+  <!-- ============ CARD 3.2 ============ -->
+  <g filter="url(#card-shadow)">
+    <rect x="780" y="720" width="380" height="150" rx="14" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5"/>
+    <rect x="792" y="732" width="130" height="20" rx="4" fill="#DCFCE7"/>
+    <text x="798" y="746" class="card-tag-text" fill="#15803D">装配② · 来源占位</text>
+    <text x="792" y="770" class="card-title">装配步骤名称占位</text>
+    <text x="792" y="798" class="card-bullet"><tspan class="card-bullet-bold">• 输入</tspan> 输入来源说明占位</text>
+    <text x="792" y="824" class="card-bullet"><tspan class="card-bullet-bold">• 处理</tspan> 处理逻辑说明占位</text>
+  </g>
+
+  <!-- ============ CARD output (lane 3, end) ============ -->
+  <g filter="url(#card-shadow)">
+    <rect x="1270" y="720" width="270" height="150" rx="14" fill="#F0F9FF" stroke="#38BDF8" stroke-width="2"/>
+    <rect x="1282" y="732" width="50" height="20" rx="4" fill="#BAE6FD"/>
+    <text x="1288" y="746" class="card-tag-text" fill="#0369A1">产出</text>
+    <text x="1282" y="770" class="card-title" fill="#0C4A6E">产出物名称占位</text>
+    <text x="1282" y="798" class="card-bullet"><tspan class="card-bullet-bold">• 内容</tspan> 内容说明占位</text>
+    <text x="1282" y="824" class="card-bullet"><tspan class="card-bullet-bold">• 去向</tspan> 去向说明占位</text>
+  </g>
+
+  <!-- ============ Pill labels on connectors ============ -->
+  <!-- Lane 1 -->
+  <g filter="url(#badge-shadow)">
+    <rect x="465" y="236" width="120" height="20" rx="10" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1"/>
+    <text x="525" y="249.7" class="pill-text" fill="#1E40AF" text-anchor="middle">结果占位 · 判据满足</text>
+  </g>
+  <g filter="url(#badge-shadow)">
+    <rect x="1005" y="236" width="140" height="20" rx="10" fill="#FFF1F2" stroke="#FDA4AF" stroke-width="1"/>
+    <text x="1075" y="249.7" class="pill-text" fill="#BE123C" text-anchor="middle">否 · 失败判据占位</text>
+  </g>
+
+  <!-- Cross-lane corridor 1 -> 2 -->
+  <g filter="url(#badge-shadow)">
+    <rect x="395" y="368" width="200" height="24" rx="12" fill="#EFF6FF" stroke="#2563EB" stroke-width="1"/>
+    <text x="495" y="384" class="corridor-pill-text" text-anchor="middle">阶段A产出占位 · 进入阶段B</text>
+  </g>
+
+  <!-- Lane 2 -->
+  <g filter="url(#badge-shadow)">
+    <rect x="330" y="527" width="110" height="20" rx="10" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1"/>
+    <text x="385" y="540.7" class="pill-text" fill="#1E40AF" text-anchor="middle">校验①通过占位</text>
+  </g>
+  <g filter="url(#badge-shadow)">
+    <rect x="1065" y="527" width="110" height="20" rx="10" fill="#FFF1F2" stroke="#FDA4AF" stroke-width="1"/>
+    <text x="1120" y="540.7" class="pill-text" fill="#BE123C" text-anchor="middle">否 · 失败判据占位</text>
+  </g>
+
+  <!-- Cross-lane corridor 2 -> 3 -->
+  <g filter="url(#badge-shadow)">
+    <rect x="585" y="638" width="220" height="24" rx="12" fill="#EFF6FF" stroke="#2563EB" stroke-width="1"/>
+    <text x="695" y="654" class="corridor-pill-text" text-anchor="middle">校验全过占位 · 进入阶段C</text>
+  </g>
+
+  <!-- Lane 3 -->
+  <g filter="url(#badge-shadow)">
+    <rect x="665" y="785" width="100" height="20" rx="10" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1"/>
+    <text x="715" y="798.7" class="pill-text" fill="#1E40AF" text-anchor="middle">装配①完成占位</text>
+  </g>
+  <g filter="url(#badge-shadow)">
+    <rect x="1170" y="785" width="90" height="20" rx="10" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1"/>
+    <text x="1215" y="798.7" class="pill-text" fill="#1E40AF" text-anchor="middle">产出就绪占位</text>
+  </g>
+
+  <!-- Footer -->
+  <text x="45" y="935" font-size="12.5" font-weight="600" fill="#475569">💡 核心提示占位: 一句话说清本流程最该记住的关键规则占位 · 关键约束占位 · 关键效果占位</text>
+  <text x="45" y="957" font-size="11.5" font-weight="500" fill="#94A3B8">「业务名」占位 · 业务流程参考图母版 · 浅色版</text>
+
+  <!-- Legend -->
+  <g>
+    <line x1="400" y1="1010" x2="435" y2="1010" stroke="#2563EB" stroke-width="2.5"/>
+    <circle cx="435" cy="1010" r="3" fill="#2563EB"/>
+    <text x="445" y="1014" font-size="12" font-weight="600" fill="#334155">主链路 / 顺序流转</text>
+    <line x1="660" y1="1010" x2="695" y2="1010" stroke="#EA580C" stroke-width="2.5"/>
+    <circle cx="695" cy="1010" r="3" fill="#EA580C"/>
+    <text x="705" y="1014" font-size="12" font-weight="600" fill="#334155">校验链(占位链路名)</text>
+    <line x1="940" y1="1010" x2="975" y2="1010" stroke="#E11D48" stroke-width="2.5" stroke-dasharray="5 3"/>
+    <circle cx="975" cy="1010" r="3" fill="#E11D48"/>
+    <text x="985" y="1014" font-size="12" font-weight="600" fill="#334155">拒绝路径 → 拒绝出口</text>
+  </g>
+</svg>
