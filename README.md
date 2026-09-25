@@ -10,6 +10,7 @@
 |---|---|
 | `governance/` | 方法论本体：`rules/` 页格式与判据，`flow/` 初始化 / 更新 / 概览 / 出图流程，`PATHS.md` 路径表，`AGENTS.md` 治理入口，`prepare.md` 准备阶段（装工具、建索引），`tool-setup.md` 工具说明与日常使用 |
 | `.claude/skills/sum-svg-diagram/` | 画图 skill（两张骨架母版 + 几何自检脚本），`governance/rules/diagram-rules.md` 按它出图 |
+| `.claude/skills/business-rule-init/` | 单条业务规则初始化 skill（手动调用 `/business-rule-init`）：步骤取自 `governance/flow/init/`，每步派子代理执行，不需要先建全局概览 |
 | `.claude/agents/code-scout.md` | 可选：源码调查子代理，成规模的源码调查交给它 |
 
 ## 前置工具
@@ -20,7 +21,7 @@
 
 1. 按 [`governance/prepare.md`](governance/prepare.md) 完成准备阶段：装两个工具、在项目里建两份索引、跑就绪检查。
 2. 把 `governance/` 复制到项目的 `kb/governance/`，项目自己的数据放 `kb/data/`（首次挂载时为空）。
-3. 把 `.claude/skills/sum-svg-diagram/` 复制到项目的 `.claude/skills/sum-svg-diagram/`；要用源码调查子代理的，再把 `.claude/agents/code-scout.md` 复制到项目的 `.claude/agents/`。
+3. 把 `.claude/skills/sum-svg-diagram/`、`.claude/skills/business-rule-init/` 复制到项目的 `.claude/skills/` 下；要用源码调查子代理的，再把 `.claude/agents/code-scout.md` 复制到项目的 `.claude/agents/`。
 4. 挂载位置不是 `kb/` 的，改 `governance/PATHS.md` 里 `MOUNT_ROOT` 一行。
 5. 先走一次 `governance/flow/project-setup.md`（项目适配，一次性），之后按 `governance/flow/README.md` 分诊进各条流程。
 
