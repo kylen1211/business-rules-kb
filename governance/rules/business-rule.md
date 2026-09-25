@@ -37,7 +37,7 @@
 4. 图(SVG)的标题/副标题/Footer 不受本节约束(沿用本规格二.6 现有例外)。
 
 **codegraph 查询口径**(任何 codegraph 查询:callers / callees / node / 锚点校验;graphify 读图同样适用):
-- **一律带代码根**:`<代码根>` = `DATA_PROJECT_FACTS`「代码位置」登记的路径换算成的绝对路径。写法:`codegraph node "<限定名>" -p <代码根>`(callers / callees / impact / explore 同样加 `-p <代码根>`)、`codegraph sync <代码根>`、`graphify update <代码根>`,报告读 `<代码根>/graphify-out/GRAPH_REPORT.md`,`graphify query` 加 `--graph <代码根>/graphify-out/graph.json`。不带路径时两个工具只认当前目录,会话不在代码仓库里启动时每个锚点都会被判成悬空。登记了多个代码根的,逐个查,锚点在任一代码根查到即不悬空。
+- **一律带代码根**:`<代码根>` = `DATA_PROJECT_FACTS`「代码位置」登记的相对路径,运行时按本机项目根换算成的绝对路径(只在命令里用,不写进任何文件)。写法:`codegraph node "<限定名>" -p <代码根>`(callers / callees / impact / explore 同样加 `-p <代码根>`)、`codegraph sync <代码根>`、`graphify update <代码根>`,报告读 `<代码根>/graphify-out/GRAPH_REPORT.md`,`graphify query` 加 `--graph <代码根>/graphify-out/graph.json`。不带路径时两个工具只认当前目录,会话不在代码仓库里启动时每个锚点都会被判成悬空。登记了多个代码根的,逐个查,锚点在任一代码根查到即不悬空。
 - 查询前先 `codegraph sync <代码根>`——只用命令行时索引不随代码自动更新,不刷新会把新代码判成悬空。
 - 悬空以输出 `not found` 为准:查不到时退出码仍是 0。
 - 「代码索引排除路径」和挂进代码仓库的 kb 目录已在建索引时按官方配置排除(`GOVERNANCE_PREPARE` 第 3 步),codegraph/graphify 的结果不用再手工过滤;不经这两个工具的扫描(`rg`、读目录)仍按 `DATA_PROJECT_FACTS` 的该字段排除。

@@ -17,7 +17,7 @@
    - **项目名**:取仓库目录名或承载文档自称的项目名,与 `overview-rules.md` 一节的项目名取法一致,不另立第二套取法。
    - **主语言 / 运行时**:如实记录(可以是多个,如"TypeScript/Node ESM + 若干 Python 脚本"),不强行归一成一种。
    - **标准排除句用词清单**:业务代码调用、但内部实现不需要本体系索引的第三方框架/运行时/SDK 具体名称(如某项目的 Node 运行时、MCP SDK;另一项目的 Python asyncio、pipecat)——供 `GOVERNANCE_FLOW_INIT` 的 `step1-overview.md`、`GOVERNANCE_FLOW_UPDATE` 的 `step3-extract.md` 里的标准排除句直接引用取值,不必每次重新论证具体该写哪个框架名。
-   - **代码位置**:业务代码所在仓库的根目录,写相对挂载所在仓库根的路径(代码与 kb 同仓写 `.`);代码分在多个仓库就逐行列出,每行 `<名称>: <路径>`。codegraph/graphify 的建索引与全部查询都按它带路径执行(不带路径时两个工具只认当前目录),用法见 `GOVERNANCE_RULES` 的 `business-rule.md`「codegraph 查询口径」。
+   - **代码位置**:业务代码所在仓库的根目录,写相对挂载所在仓库根的路径(代码与 kb 同仓写 `.`;不写绝对路径,换机器或换克隆位置时不用改;代码在另一个仓库时写 `../<仓库名>` 这类相对路径,各机器上两个仓库的相对位置要一致);代码分在多个仓库就逐行列出,每行 `<名称>: <路径>`。codegraph/graphify 的建索引与全部查询都按它带路径执行(不带路径时两个工具只认当前目录),用法见 `GOVERNANCE_RULES` 的 `business-rule.md`「codegraph 查询口径」。
    - **代码索引排除路径**:会让同一份代码被索引两次的路径(符号链接、生成副本等),建索引时写进官方排除配置(见 `GOVERNANCE_PREPARE` 第 3 步);没有就写「无」。查法:`find . \( -name .git -o -name node_modules -o -name .venv \) -prune -o -type l -print` 找出指向项目内代码的符号链接。
 3. 写入 `DATA_PROJECT_FACTS`(新建或覆盖),字段固定六项:项目名 / 主语言运行时 / 标准排除句用词清单 / 代码位置 / 代码索引排除路径 / 完成日期。
 

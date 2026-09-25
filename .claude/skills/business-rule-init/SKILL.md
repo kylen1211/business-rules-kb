@@ -20,7 +20,7 @@ disable-model-invocation: true
 
 1. **项目根**：当前目录所在 git 仓库的根（`git rev-parse --show-toplevel`）。kb 挂在这个仓库里，最后的提交也落在这里。
 2. **挂载根**：读 `<项目根>/kb/governance/PATHS.md` 的 `MOUNT_ROOT`；挂载位置不是 `kb/` 的，以用户说的为准。之后的逻辑名都按这张表解析。
-3. **代码位置**：`DATA_PROJECT_FACTS` 里有「代码位置」就用它；没有就默认取 `.`（代码和 kb 同在项目根），给用户确认或改。把每个路径换算成绝对路径，记为 `<代码根>`，确认都存在。之后所有 codegraph / graphify 命令都带它（`GOVERNANCE_RULES` 的 `business-rule.md`「codegraph 查询口径」）。
+3. **代码位置**：`DATA_PROJECT_FACTS` 里有「代码位置」就用它；没有就默认取 `.`（代码和 kb 同在项目根），给用户确认或改。把每个路径按本机的项目根换算成绝对路径，记为 `<代码根>`，确认都存在。绝对路径只在本次运行里用（命令参数、派发说明），不写进任何文件；登记和产物里一律是相对路径，换机器、换克隆位置都不用改。之后所有 codegraph / graphify 命令都带它（`GOVERNANCE_RULES` 的 `business-rule.md`「codegraph 查询口径」）。
 
 然后看 `DATA_PROJECT_FACTS`：不存在或六项有缺 → 派一个子代理执行 `steps/step-setup.md`（模型 `sonnet`，派发时带上已确认的代码位置），把写入的六项转给用户确认，要改的派新的子代理带着意见重做。六项齐全 → 跳过。
 
