@@ -39,7 +39,22 @@ disable-model-invocation: true
 
 本会话自己做，命令和期望值都在 `GOVERNANCE_PREPARE`；登记了多个代码根的，第 3–5 条逐个代码根做：
 
-1. **命令行**：`codegraph --version`、`graphify --version`。缺哪个就停下，把 `GOVERNANCE_PREPARE` 第一部分给用户，由用户一个一个装，不替用户安装。
+1. **命令行**：`codegraph --version`、`graphify --version`。缺哪个，就用 AskUserQuestion 问用户「现在由我装，还是你自己装」；用户自己装的，把下面的命令给用户，装完再继续。由本会话装的，只装命令行、一个一个来，每装一个扫描一次，扫描为空才装下一个（依据与说明见 `GOVERNANCE_PREPARE` 第一部分）：
+
+   ```bash
+   # codegraph：官方安装脚本只放程序进 ~/.codegraph/、在 ~/.local/bin/ 建链接，不接入助手
+   curl -fsSL https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.sh | sh
+   ~/.local/bin/codegraph --version
+   ~/.local/bin/codegraph telemetry off          # 官方默认开启匿名使用统计
+   <GOVERNANCE_TOOL_SCAN> codegraph <项目根>     # 输出为空才继续
+
+   # graphify：前提 Python 3.10+ 与 uv；PyPI 包名是双 y 的 graphifyy
+   uv tool install graphifyy
+   graphify --version
+   <GOVERNANCE_TOOL_SCAN> graphify <项目根>      # 输出为空才继续
+   ```
+
+   只跑上面这些。官方说明里的下一步 `codegraph install`、`graphify install`、`graphify claude install` 是把工具接进助手，不跑。`~/.local/bin` 不在 PATH 里的，告诉用户加进 PATH（graphify 官方：`uv tool update-shell`），本次运行先用完整路径。
 2. **没接进助手**：跑 `GOVERNANCE_TOOL_SCAN all <项目根>`，代码根不是项目根的，对每个 `<代码根>` 也跑一次。有输出就停下，把输出和 `GOVERNANCE_PREPARE`「附：扫描有输出怎么清」转给用户，清干净再继续——这些改的是用户的配置，不替用户改。
 3. **索引**：`<代码根>/.codegraph/` 或 `<代码根>/graphify-out/GRAPH_REPORT.md` 缺哪份，就按 `GOVERNANCE_PREPARE` 第 3 步建哪份（先确认排除配置已写，再 `codegraph init <代码根>` / `graphify update <代码根>`）。
 4. **刷新**：第 3 条没有新建的那份，刷到当前代码：`codegraph sync <代码根>`、`graphify update <代码根>`。
