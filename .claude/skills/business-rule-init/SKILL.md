@@ -18,16 +18,26 @@ disable-model-invocation: true
 逐条确认，不满足就停下告诉用户缺什么：
 
 1. **挂载根**：读项目里的 `kb/governance/PATHS.md`（挂载位置不是 `kb/` 的，以用户说的为准），取 `MOUNT_ROOT`。下文逻辑名都按这张表解析。
-2. **准备阶段已完成**：`.codegraph/` 和 `graphify-out/GRAPH_REPORT.md` 都存在。没有就让用户按 `GOVERNANCE_PREPARE` 做完。
-3. **项目适配已完成**：`DATA_PROJECT_FACTS` 存在。没有就让用户先走 `GOVERNANCE_FLOW_SETUP`。
-4. **概览在不在**：看 `ENTRY_OVERVIEW` 是否存在，记为 `有概览` / `无概览`，派步 1 和步 6 时传下去。
+2. **项目适配已完成**：`DATA_PROJECT_FACTS` 存在。没有就让用户先走 `GOVERNANCE_FLOW_SETUP`。
+3. **概览在不在**：看 `ENTRY_OVERVIEW` 是否存在，记为 `有概览` / `无概览`，派步 1 和步 6 时传下去。
+
+## 步 0 · 工具准备
+
+本会话在项目根目录自己做，命令和期望值都在 `GOVERNANCE_PREPARE`：
+
+1. **命令行**：`codegraph --version`、`graphify --version`。缺哪个就停下，把 `GOVERNANCE_PREPARE` 第 1 步的安装命令给用户，不替用户安装。
+2. **索引**：`.codegraph/` 或 `graphify-out/GRAPH_REPORT.md` 缺哪份，就按 `GOVERNANCE_PREPARE` 第 2 步建哪份（`codegraph init .` / `graphify update .`），并确认两个目录在 `.gitignore` 里。
+3. **刷新**：两份都在的，查询前刷到当前代码：`codegraph sync .`、`graphify update .`。
+4. **就绪检查**：按 `GOVERNANCE_PREPARE` 第 3 步逐条执行。「没接进助手」那四条不符合的，停下告诉用户，按 `GOVERNANCE_TOOL_SETUP`「误装了怎么撤回」处理后再跑。
+
+全部符合才派步 1。结果（版本号、建了还是刷新了哪份索引、检查逐条结论）写进最后给用户的汇报。
 
 ## 步骤
 
 | tier | 走哪几步 |
 |---|---|
-| 骨架 | 步 1 → 步 3 → 步 6 |
-| 细节 | 步 1 → 步 2 → 步 3 → 步 4 → 步 6 |
+| 骨架 | 步 0 → 步 1 → 步 3 → 步 6 |
+| 细节 | 步 0 → 步 1 → 步 2 → 步 3 → 步 4 → 步 6 |
 
 编号沿用原流程，没有步 5（出图已独立成 `diagram-draw`，本 skill 不出图，图槽位放占位图）。
 
