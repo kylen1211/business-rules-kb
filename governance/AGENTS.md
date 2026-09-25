@@ -5,6 +5,7 @@
 - **挂载根声明**:本体系当前挂载在项目仓库的 `kb/` 目录下(即 MOUNT_ROOT,定义见 `governance/PATHS.md`——本行是找到该表的唯一入口,除此之外体系内正文不再直接书写字面路径)。换项目、换挂载位置、或调整内部目录结构,只改 `governance/PATHS.md` 对应行,不需要排查全库旧写法。体系内正文引用体系内文件/目录一律用路径表里的逻辑名(如 `DATA_BUSINESS`、`GOVERNANCE_RULES`)指代;真实 Markdown 超链接例外,一律写可解析的字面路径(渲染器不认识逻辑名),正确性由链接检查工具核对。
 - 页格式看 `GOVERNANCE_RULES` 的 `business-rule.md`;流程判据、模板槽位、log 记录规则看 `GOVERNANCE_RULES` 的 `assembly-rules.md`;图的风格与产出规范看 `GOVERNANCE_RULES` 的 `diagram-rules.md`(本体系全部图统一规范,业务链路局部图 + 业务全貌图 + 全局业务图 + 全局架构图)。
 - **进哪条流程由 `GOVERNANCE_FLOW` 的 `README.md`("入口分诊")统一裁决,三条流程(初始化/更新/概览)内部不互相转介**——业务规则初始化按 `GOVERNANCE_FLOW_INIT` 五步执行(出图已独立成 `GOVERNANCE_FLOW` 的 `diagram-draw.md`,不占编号)、业务规则更新按 `GOVERNANCE_FLOW_UPDATE` 六步执行,具体分诊判据、每条流程的起点与触发源见该文件。
+- **走任何流程之前**,先完成准备阶段 `GOVERNANCE_PREPARE`(装代码查询工具、建索引);它不属于流程,不产出 kb 数据。
 - **项目首次挂载本体系(或体系版本升级后需要重新核对适配数据)**,先走一次性前置阶段 `GOVERNANCE_FLOW_SETUP`(挂载根确认 + 项目适配事实卡,产出 `DATA_PROJECT_FACTS`)——这一步只产出项目专属**数据**,不改 `GOVERNANCE_RULES`/`GOVERNANCE_FLOW` 下任何方法论文件正文;三条常规流程(初始化/更新/概览)在该阶段完成前不具备执行前提,完成后除非体系升级要求重新核对,不需要重跑。
 - 全局概览(`ENTRY_OVERVIEW`)的结构与判据看 `GOVERNANCE_RULES` 的 `overview-rules.md`;首次生成/重建按 `GOVERNANCE_FLOW` 的 `overview-init.md`(一次性);业务页任意一次组装通过校验后的同步动作见 `GOVERNANCE_FLOW` 的 `overview-sync.md`。
 - 以上三套流程(概览初始化 / 业务初始化 / 业务更新)相互独立,不互相引用作业方法,只共用本页列出的格式与判据规则。
