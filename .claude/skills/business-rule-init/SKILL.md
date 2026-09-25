@@ -20,9 +20,15 @@ disable-model-invocation: true
 
 1. **项目根**：当前目录所在 git 仓库的根（`git rev-parse --show-toplevel`）。kb 挂在这个仓库里，最后的提交也落在这里。
 2. **挂载根**：读 `<项目根>/kb/governance/PATHS.md` 的 `MOUNT_ROOT`；挂载位置不是 `kb/` 的，以用户说的为准。之后的逻辑名都按这张表解析。
-3. **代码位置**：`DATA_PROJECT_FACTS` 里有「代码位置」就用它；没有就默认取 `.`（代码和 kb 同在项目根），给用户确认或改。把每个路径按本机的项目根换算成绝对路径，记为 `<代码根>`，确认都存在。绝对路径只在本次运行里用（命令参数、派发说明），不写进任何文件；登记和产物里一律是相对路径，换机器、换克隆位置都不用改。之后所有 codegraph / graphify 命令都带它（`GOVERNANCE_RULES` 的 `business-rule.md`「codegraph 查询口径」）。
+3. **代码位置**：用 AskUserQuestion 让用户选（`multiSelect: true`，代码分在多个仓库时可多选；列表外的由用户在「Other」里输入相对路径）。选项按下面顺序取，最多 4 个，每个写相对项目根的路径和一句说明（仓库名、最近一次提交日期）：
+   - `DATA_PROJECT_FACTS` 已登记的「代码位置」，标「沿用已登记（Recommended）」；
+   - 没登记过时，`.`（代码和 kb 同在项目根）标 Recommended；
+   - 项目根里嵌套的 git 仓库（`find <项目根> -mindepth 2 -maxdepth 3 -name .git -not -path '*/node_modules/*'`，含 submodule），写成 `<子目录>`；
+   - 项目根旁边的 git 仓库（`find <项目根>/.. -mindepth 2 -maxdepth 2 -name .git`），写成 `../<仓库名>`；排除项目根自己和没有提交的空仓库（`git -C <目录> log -1 --format=%cs` 无输出），按最近提交时间取前几个。
 
-然后看 `DATA_PROJECT_FACTS`：不存在或六项有缺 → 派一个子代理执行 `steps/step-setup.md`（模型 `sonnet`，派发时带上已确认的代码位置），把写入的六项转给用户确认，要改的派新的子代理带着意见重做。六项齐全 → 跳过。
+   用户选定后把每个路径按本机的项目根换算成绝对路径，记为 `<代码根>`，确认都存在。绝对路径只在本次运行里用（命令参数、派发说明），不写进任何文件；登记和产物里一律是相对路径，换机器、换克隆位置都不用改。之后所有 codegraph / graphify 命令都带它（`GOVERNANCE_RULES` 的 `business-rule.md`「codegraph 查询口径」）。
+
+然后看 `DATA_PROJECT_FACTS`：已存在但用户选的代码位置和登记的不同 → 本会话把「代码位置」一项改成新选的（其他项不动，随收尾一起提交）。不存在或六项有缺 → 派一个子代理执行 `steps/step-setup.md`（模型 `sonnet`，派发时带上已确认的代码位置），把写入的六项转给用户确认，要改的派新的子代理带着意见重做。六项齐全 → 跳过。
 
 最后确认两项：
 
