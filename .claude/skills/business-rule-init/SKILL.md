@@ -25,10 +25,11 @@ disable-model-invocation: true
 
 本会话在项目根目录自己做，命令和期望值都在 `GOVERNANCE_PREPARE`：
 
-1. **命令行**：`codegraph --version`、`graphify --version`。缺哪个就停下，把 `GOVERNANCE_PREPARE` 第 1 步的安装命令给用户，不替用户安装。
-2. **索引**：`.codegraph/` 或 `graphify-out/GRAPH_REPORT.md` 缺哪份，就按 `GOVERNANCE_PREPARE` 第 2 步建哪份（`codegraph init .` / `graphify update .`），并确认两个目录在 `.gitignore` 里。
-3. **刷新**：两份都在的，查询前刷到当前代码：`codegraph sync .`、`graphify update .`。
-4. **就绪检查**：按 `GOVERNANCE_PREPARE` 第 3 步逐条执行。「没接进助手」那四条不符合的，停下告诉用户，按 `GOVERNANCE_TOOL_SETUP`「误装了怎么撤回」处理后再跑。
+1. **命令行**：`codegraph --version`、`graphify --version`。缺哪个就停下，把 `GOVERNANCE_PREPARE` 第 1、2 步给用户，由用户按顺序一个一个装，不替用户安装。
+2. **没接进助手**：跑 `GOVERNANCE_TOOL_SCAN all .`。有输出就停下，把输出和 `GOVERNANCE_PREPARE`「附：以前接入过助手，或扫描有输出」转给用户，清干净再继续——这些改的是用户的全局配置，不替用户改。
+3. **索引**：`.codegraph/` 或 `graphify-out/GRAPH_REPORT.md` 缺哪份，就按 `GOVERNANCE_PREPARE` 第 3 步建哪份（`codegraph init .` / `graphify update .`），并确认两个目录在 `.gitignore` 里。
+4. **刷新**：两份都在的，查询前刷到当前代码：`codegraph sync .`、`graphify update .`。
+5. **就绪检查**：按 `GOVERNANCE_PREPARE` 第 4 步逐条执行。
 
 全部符合才派步 1。结果（版本号、建了还是刷新了哪份索引、检查逐条结论）写进最后给用户的汇报。
 

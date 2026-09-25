@@ -22,8 +22,9 @@
 | `GOVERNANCE_FLOW_INIT` | `governance/flow/init/` | 业务初始化流程 | 方法论 |
 | `GOVERNANCE_FLOW_UPDATE` | `governance/flow/update/` | 业务更新流程 | 方法论 |
 | `GOVERNANCE_FLOW_SETUP` | `governance/flow/project-setup.md` | 项目适配初始化流程(一次性前置阶段) | 方法论 |
-| `GOVERNANCE_PREPARE` | `governance/prepare.md` | 准备阶段:装代码查询工具、建索引、就绪检查(不属于流程,走任何流程前做一次) | 方法论 |
-| `GOVERNANCE_TOOL_SETUP` | `governance/tool-setup.md` | 代码查询工具(codegraph/graphify)的说明:为什么只装命令行、误装撤回、查询前刷新 | 方法论 |
+| `GOVERNANCE_PREPARE` | `governance/prepare.md` | 准备阶段:只装代码查询工具的命令行、建索引、就绪检查(不属于流程,走任何流程前做一次) | 方法论 |
+| `GOVERNANCE_TOOL_SCAN` | `governance/scripts/tool-residue-scan.sh` | 只读扫描 codegraph/graphify 接入 Claude Code 的残留,输出为空即干净 | 方法论 |
+| `GOVERNANCE_TOOL_SETUP` | `governance/tool-setup.md` | 代码查询工具(codegraph/graphify)的说明:各管什么、为什么不接进助手、查询前刷新 | 方法论 |
 | `DATA_BUSINESS` | `data/business/` | 业务规则页(`type: rule`) | 数据 |
 | `DATA_BUSINESS_RAW` | `data/business/raw/` | 业务取证批次原始产物 | 数据 |
 | `DATA_CONTRACT_SURFACE` | `data/contract-surface.md` | 登记页·契约面(`type: registry`) | 数据 |
