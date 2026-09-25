@@ -36,7 +36,11 @@
 3. 每个锚点的限定名必须能被 `codegraph node` 查到;查不到即悬空,按 `overview-rules.md` 定位信息判据同款处理——不允许留在正文,改用定位话形式或删除该行。
 4. 图(SVG)的标题/副标题/Footer 不受本节约束(沿用本规格二.6 现有例外)。
 
-**codegraph 查询排除路径**:`server/evals/fault_run/bot.py` 是 `server/bot.py` 的符号链接,codegraph 会把同一份代码重复索引成两套节点。任何 codegraph 查询(callers / callees / node / 锚点校验)都要排除 `server/evals/fault_run/` 路径,否则同一符号出现两条记录、影响面读数翻倍。
+**codegraph 查询口径**(任何 codegraph 查询:callers / callees / node / 锚点校验):
+- 查询前先 `codegraph sync`——只用命令行时索引不随代码自动更新,不刷新会把新代码判成悬空。
+- 悬空以输出 `not found` 为准:查不到时退出码仍是 0。
+- 查询结果排除 `DATA_PROJECT_FACTS` 登记的「代码索引排除路径」(符号链接、生成副本等会让同一份代码被索引两次),否则同一符号出现两条记录、影响面读数翻倍。
+- 工具安装与建索引见 `GOVERNANCE_TOOL_SETUP`。
 
 ## 三、怎么算完整(分两档)
 

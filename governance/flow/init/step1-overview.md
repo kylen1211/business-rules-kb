@@ -8,7 +8,7 @@
 
 **工具口径**:
 - graphify 在本步**仅用于圈文件范围**——只读 `GRAPH_REPORT.md` 的 God Nodes / Communities 段定位该业务大致涉及哪些文件,**不用其社区分组结果作业务划分依据**(社区分组是代码结构聚类,不等同业务边界);不读 `wiki/`。
-- 需要用 codegraph 核对符号(callers/callees/node)时,查询结果排除 `server/evals/fault_run/` 路径(该路径是 `server/bot.py` 的符号链接,会把同一符号重复索引成两套节点)。
+- 需要用 codegraph 核对符号(callers/callees/node)时,按 `GOVERNANCE_RULES` 的 `business-rule.md`「codegraph 查询口径」执行。
 
 ## 产出
 

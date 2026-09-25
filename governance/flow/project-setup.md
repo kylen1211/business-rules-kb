@@ -16,11 +16,13 @@
    - **项目名**:取仓库目录名或承载文档自称的项目名,与 `overview-rules.md` 一节的项目名取法一致,不另立第二套取法。
    - **主语言 / 运行时**:如实记录(可以是多个,如"TypeScript/Node ESM + 若干 Python 脚本"),不强行归一成一种。
    - **标准排除句用词清单**:业务代码调用、但内部实现不需要本体系索引的第三方框架/运行时/SDK 具体名称(如某项目的 Node 运行时、MCP SDK;另一项目的 Python asyncio、pipecat)——供 `GOVERNANCE_FLOW_INIT` 的 `step1-overview.md`、`GOVERNANCE_FLOW_UPDATE` 的 `step3-extract.md` 里的标准排除句直接引用取值,不必每次重新论证具体该写哪个框架名。
-3. 写入 `DATA_PROJECT_FACTS`(新建或覆盖),字段固定四项:项目名 / 主语言运行时 / 标准排除句用词清单 / 完成日期。
+   - **代码索引排除路径**:会让同一份代码被索引两次的路径(符号链接、生成副本等),codegraph/graphify 查询结果按它排除,用法见 `GOVERNANCE_RULES` 的 `business-rule.md`「codegraph 查询口径」;没有就写「无」。查法:`find . \( -name .git -o -name node_modules -o -name .venv \) -prune -o -type l -print` 找出指向项目内代码的符号链接。
+3. **代码查询工具就绪**:按 `GOVERNANCE_TOOL_SETUP` 第 6 节「就绪检查」逐条执行;未就绪的按该页 3–4 节安装、建索引后重查。
+4. 写入 `DATA_PROJECT_FACTS`(新建或覆盖),字段固定五项:项目名 / 主语言运行时 / 标准排除句用词清单 / 代码索引排除路径 / 完成日期。
 
 ### 产出
 
-`DATA_PROJECT_FACTS` 文件(新建或覆盖)+ `ENTRY_PATHS` 的 `MOUNT_ROOT` 行确认或更新结果。
+`DATA_PROJECT_FACTS` 文件(新建或覆盖)+ `ENTRY_PATHS` 的 `MOUNT_ROOT` 行确认或更新结果 + 工具就绪检查逐条结果(写进回执)。
 
 ### 注意
 
@@ -31,11 +33,13 @@
 
 ### 通过判据
 
-`DATA_PROJECT_FACTS` 文件存在且四个字段(项目名 / 主语言运行时 / 标准排除句用词清单 / 完成日期)均非空;`ENTRY_PATHS` 的 `MOUNT_ROOT` 行与本项目实际挂载位置一致。
+`DATA_PROJECT_FACTS` 文件存在且五个字段(项目名 / 主语言运行时 / 标准排除句用词清单 / 代码索引排除路径 / 完成日期)均非空;`GOVERNANCE_TOOL_SETUP` 第 6 节就绪检查全部符合;`ENTRY_PATHS` 的 `MOUNT_ROOT` 行与本项目实际挂载位置一致。
 
 ### 引用的规则条款
 
 - 路径表机制与例外(`ENTRY_PATHS` 本文件)
 - 项目名取法(`GOVERNANCE_RULES` 的 `overview-rules.md` 一)
 - 标准排除句的消费方式(`GOVERNANCE_FLOW_INIT` 的 `step1-overview.md`、`GOVERNANCE_FLOW_UPDATE` 的 `step3-extract.md`)
+- 代码索引排除路径的消费方式(`GOVERNANCE_RULES` 的 `business-rule.md`「codegraph 查询口径」)
+- 工具安装与就绪检查(`GOVERNANCE_TOOL_SETUP`)
 - 配件行判定方法(`GOVERNANCE_RULES` 的 `overview-rules.md` 四·4.2/4.3,本阶段不重复其判据,只作前置事实准备)
